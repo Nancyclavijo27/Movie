@@ -23,6 +23,8 @@ app.use('/details', detailsRoutes);
 // Configurar Swagger
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 
+
+
 // Ruta para obtener todas las películas populares
 app.get('/movies/popular', async (req, res) => {
   try {
