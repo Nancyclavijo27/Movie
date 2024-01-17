@@ -1,24 +1,19 @@
 // src/components/MovieDetail.jsx
 import React, { useState, useEffect } from 'react';
-import tmdbAxios from '../services/api';
+import { getMovieDetails } from '../services/api';
 
 const MovieDetail = ({ movieId }) => {
   const [selectedMovie, setSelectedMovie] = useState(null);
 
   useEffect(() => {
+    console.log('MovieDetail component is mounted with movieId:', movieId);
     const fetchData = async () => {
-      try {
-        // Agrega una validación para asegurarte de que movieId no sea null
-        if (!movieId) {
-            return;
-          }
-  
-        const response = await tmdbAxios.get(`/details/${movieId}`);
-        setSelectedMovie(response.data);
-      } catch (error) {
-        console.error('Error fetching movie details:', error);
-        setSelectedMovie(null);
+      if (!movieId) {
+        return;
       }
+
+      const details = await getMovieDetails(movieId);
+      setSelectedMovie(details);
     };
 
     fetchData();

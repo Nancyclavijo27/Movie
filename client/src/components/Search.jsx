@@ -1,28 +1,38 @@
 // src/components/Search.jsx
 import React, { useState, useEffect } from 'react';
-import tmdbAxios from '../services/api';
+import { searchMovies, getSuggestions } from '../services/api';
 
 const Search = ({ onResultClick }) => {
   const [query, setQuery] = useState('');
   const [searchResults, setSearchResults] = useState([]);
+  const [suggestions, setSuggestions] = useState([]);
 
   useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const response = await tmdbAxios.get(`/search/all`, {
-          params: {
-            query: query,
-          },
-        });
-        setSearchResults(response.data);
-      } catch (error) {
-        console.error('Error fetching movies:', error);
-        setSearchResults([]);
-      }
+    const fetchSuggestions = async () => {
+      const suggestions = await getSuggestions();
+      setSuggestions(suggestions);
     };
 
-    fetchData();
-  }, [query]);
+    fetchSuggestions();
+  }, []);
+
+  const handleSearch = async () => {
+    const results = await searchMovies(query);
+    setSearchResults(results);
+  };
+
+  const handleQueryChange = (event) => {
+    const inputQuery = event.target.value;
+    setQuery(inputQuery);
+
+    // Filtrar sugerencias basadas en la entrada del usuario
+    const filteredSuggestions = suggestions.filter(
+      (movie) =>
+        movie.title.toLowerCase().includes(inputQuery.toLowerCase()) ||
+        movie.releaseYear.toString().includes(inputQuery)
+    );
+    setSearchResults(filteredSuggestions);
+  };
 
   return (
     <div className="search-container">
@@ -30,9 +40,11 @@ const Search = ({ onResultClick }) => {
         type="text"
         placeholder="Buscar películas..."
         value={query}
-        onChange={(e) => setQuery(e.target.value)}
+        onChange={handleQueryChange}
       />
-      
+
+      <button onClick={handleSearch}>Buscar</button>
+
       <ul>
         {searchResults.map((result) => (
           <li key={result.id} onClick={() => onResultClick(result.id)}>

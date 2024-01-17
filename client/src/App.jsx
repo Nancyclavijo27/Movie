@@ -2,20 +2,17 @@
 import React from 'react';
 import Search from './components/Search';
 import MovieDetail from './components/MovieDetail';
-import './App.css'; // Importa tus estilos CSS aquí si es necesario
 
 const App = () => {
-  const [selectedMovieId, setSelectedMovieId] = React.useState(null);
-
   const handleResultClick = (movieId) => {
-    setSelectedMovieId(movieId);
+    // Implementa lógica para manejar la selección de una película
+    console.log(`Mostrar detalles de la película con ID: ${movieId}`);
   };
 
   return (
     <div className="app-container">
-      <h1>Sistema de Búsqueda de Películas</h1>
       <Search onResultClick={handleResultClick} />
-      <MovieDetail movieId={selectedMovieId} />
+      {/* Puedes agregar otros componentes aquí según sea necesario */}
     </div>
   );
 };
