@@ -1,14 +1,38 @@
-// backend/routes/details.js
 const express = require('express');
 const router = express.Router();
 const axios = require('axios');
 
+/**
+ * @swagger
+ * /details/{id}:
+ *   get:
+ *     summary: Obtiene detalles de una película por su ID.
+ *     description: Retorna detalles específicos de una película.
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         description: ID de la película.
+ *         schema:
+ *           type: string
+ *     responses:
+ *       '200':
+ *         description: Éxito, devuelve los detalles de la película.
+ *         content:
+ *           application/json:
+ *             example:
+ *               title: 'Nombre de la película'
+ *               description: 'Descripción de la película.'
+ *               genre: 'Acción, Aventura'
+ *               rating: 8.5
+ */
+
 router.get('/:id', async (req, res) => {
   try {
     const { id } = req.params;
-    const response = await axios.get(`https://api.themoviedb.org/3/movie/${id}`, {
+    const response = await axios.get(`${process.env.TMDB_API_URL}/movie/${id}`, {
       params: {
-        api_key: 'YOUR_TMDB_API_KEY', // Reemplazar con tu clave de API de TMDb
+        api_key: process.env.TMDB_API_KEY,
       },
     });
 

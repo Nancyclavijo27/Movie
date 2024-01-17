@@ -1,14 +1,27 @@
-// index.js
-require('dotenv').config(); // Cargar variables de entorno desde el archivo .env
+require('dotenv').config();
 const express = require('express');
+const swaggerUi = require('swagger-ui-express');
+const swaggerDocument = require('./src/config/swaggerConfig');
 const axios = require('axios');
-
 
 const app = express();
 const PORT = process.env.PORT || 3001;
 
 app.use(express.json());
 
+// Importar rutas
+const searchRoutes = require('./src/Routes/search');
+const detailsRoutes = require('./src/Routes/details');
+
+// Usar las rutas
+app.use('/search', searchRoutes);
+app.use('/details', detailsRoutes);
+
+// Configurar Swagger
+app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
+
+
+// Ruta para obtener todas las películas populares
 app.get('/movies/popular', async (req, res) => {
   try {
     const response = await axios.get('https://api.themoviedb.org/3/movie/popular', {
