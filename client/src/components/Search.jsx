@@ -1,6 +1,6 @@
 // src/components/Search.jsx
 import React, { useState, useEffect } from 'react';
-import axios from 'axios';
+import tmdbAxios from '../services/api';
 
 const Search = ({ onResultClick }) => {
   const [query, setQuery] = useState('');
@@ -9,17 +9,12 @@ const Search = ({ onResultClick }) => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        if (query.trim() === '') {
-          setSearchResults([]);
-          return;
-        }
-
-        const response = await axios.get(`http://localhost:3001/api/search-movies`, {
+        const response = await tmdbAxios.get(`/search/all`, {
           params: {
-            query,
+            query: query,
           },
         });
-        setSearchResults(response.data.results);
+        setSearchResults(response.data);
       } catch (error) {
         console.error('Error fetching movies:', error);
         setSearchResults([]);

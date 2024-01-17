@@ -1,6 +1,6 @@
 // src/components/MovieDetail.jsx
 import React, { useState, useEffect } from 'react';
-import axios from 'axios';
+import tmdbAxios from '../services/api';
 
 const MovieDetail = ({ movieId }) => {
   const [selectedMovie, setSelectedMovie] = useState(null);
@@ -8,7 +8,12 @@ const MovieDetail = ({ movieId }) => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await axios.get(`http://localhost:3001/api/movie-details/${movieId}`);
+        // Agrega una validación para asegurarte de que movieId no sea null
+        if (!movieId) {
+            return;
+          }
+  
+        const response = await tmdbAxios.get(`/details/${movieId}`);
         setSelectedMovie(response.data);
       } catch (error) {
         console.error('Error fetching movie details:', error);
@@ -21,13 +26,15 @@ const MovieDetail = ({ movieId }) => {
 
   return (
     <div className="detail-container">
-      {selectedMovie && (
+      {selectedMovie ? (
         <div>
           <h2>{selectedMovie.title}</h2>
-          <p>{selectedMovie.overview}</p>
+          <p>{selectedMovie.description}</p>
           <p>Genre: {selectedMovie.genre}</p>
-          <p>Rating: {selectedMovie.vote_average}</p>
+          <p>Rating: {selectedMovie.rating}</p>
         </div>
+      ) : (
+        <p>Selecciona una película para ver detalles.</p>
       )}
     </div>
   );
