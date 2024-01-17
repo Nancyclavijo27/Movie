@@ -2,46 +2,40 @@
 import React, { useState } from 'react';
 import Search from './components/Search';
 import MovieDetail from './components/MovieDetail';
-import { searchMovies, getMovieDetails, getSuggestions } from './services/api';
+import {  getMovieDetails } from './services/api';
 
 const App = () => {
+  // Estado para almacenar el ID de la película seleccionada
   const [selectedMovieId, setSelectedMovieId] = useState(null);
-  const [searchResults, setSearchResults] = useState([]);
-  const [suggestions, setSuggestions] = useState([]);
 
-  const handleSearch = async (query) => {
-    const results = await searchMovies(query);
+  // Estado para almacenar los resultados de la búsqueda
+  const [searchResults, setSearchResults] = useState([]);
+
+  // Manejar la búsqueda de películas
+  const handleSearch = async (query, results) => {
+    // Actualizar el estado de los resultados de la búsqueda
     setSearchResults(results);
   };
 
+  // Manejar el clic en un resultado de búsqueda
   const handleResultClick = async (movieId) => {
+    // Actualizar el estado con el ID de la película seleccionada
     setSelectedMovieId(movieId);
+
     // Obtener detalles de la película seleccionada
     const details = await getMovieDetails(movieId);
     console.log('Movie details:', details);
   };
 
-  const fetchSuggestions = async () => {
-    const suggestions = await getSuggestions();
-    setSuggestions(suggestions);
-  };
-
   return (
     <div>
+      {/* Componente de búsqueda */}
       <Search onSearch={handleSearch} onResultClick={handleResultClick} />
+
+      {/* Componente de detalles de la película */}
       <MovieDetail movieId={selectedMovieId} />
 
-      {/* Puedes mostrar las sugerencias en algún lugar, como una lista lateral */}
-      <div>
-        <h3>Sugerencias:</h3>
-        <ul>
-          {suggestions.map((suggestion) => (
-            <li key={suggestion.id} onClick={() => handleResultClick(suggestion.id)}>
-              {suggestion.title} ({suggestion.releaseYear})
-            </li>
-          ))}
-        </ul>
-      </div>
+      {/* No necesitas mostrar las sugerencias aquí, ya que el componente Search se encarga de eso */}
     </div>
   );
 };
