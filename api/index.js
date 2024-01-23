@@ -12,7 +12,7 @@ app.use(express.json());
 app.use(cors());
 
 const corsOptions = {
-  origin: 'https://movapi-0u9d.onrender.com',
+  origin: '*',
   optionsSuccessStatus: 200,
 };
 
