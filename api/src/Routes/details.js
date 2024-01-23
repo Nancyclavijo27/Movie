@@ -30,6 +30,11 @@ const axios = require('axios');
 router.get('/details/:id', async (req, res) => {
   try {
     const { id } = req.params;
+    // Validar que el ID sea un número válido antes de hacer la solicitud
+    if (isNaN(id) || id <= 0) {
+      res.status(400).json({ error: 'ID de película no válido' });
+      return;
+    }
     const response = await axios.get(`${process.env.TMDB_API_URL}/movie/${id}`, {
       params: {
         api_key: process.env.TMDB_API_KEY,
@@ -46,7 +51,20 @@ router.get('/details/:id', async (req, res) => {
     res.json(movieDetails);
   } catch (error) {
     console.error(error);
-    res.status(500).json({ error: 'Internal Server Error' });
+  
+    if (error.response) {
+      // La solicitud se completó, pero el servidor respondió con un código de estado diferente de 2xx
+      console.error('Error de respuesta del servidor:', error.response.data);
+      res.status(error.response.status).json({ error: error.response.data });
+    } else if (error.request) {
+      // La solicitud fue hecha, pero no se recibió respuesta
+      console.error('No se recibió respuesta del servidor:', error.request);
+      res.status(500).json({ error: 'Internal Server Error' });
+    } else {
+      // Ocurrió un error durante la configuración de la solicitud
+      console.error('Error durante la configuración de la solicitud:', error.message);
+      res.status(500).json({ error: 'Internal Server Error' });
+    }
   }
 });
 
