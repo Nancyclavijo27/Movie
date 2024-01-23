@@ -27,7 +27,7 @@ const axios = require('axios');
  *               rating: 8.5
  */
 
-router.get('/details/:id', async (req, res) => {
+router.get('/:id', async (req, res) => {
   try {
     const { id } = req.params;
     // Validar que el ID sea un número válido antes de hacer la solicitud
