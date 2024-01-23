@@ -1,8 +1,8 @@
 // src/services/api.js
 import axios from 'axios';
-
+const baseURL = process.env.REACT_APP_BACKEND_URL || 'http://localhost:3001';
 const tmdbAxios = axios.create({
-  baseURL: 'http://localhost:3001',
+  baseURL: baseURL,
 });
 
 export const searchMovies = async (query) => {
