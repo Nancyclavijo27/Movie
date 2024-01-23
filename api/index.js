@@ -11,6 +11,13 @@ const PORT = process.env.PORT || 3001;
 app.use(express.json());
 app.use(cors());
 
+const corsOptions = {
+  origin: 'https://movapi-0u9d.onrender.com',
+  optionsSuccessStatus: 200,
+};
+
+app.use(cors(corsOptions));
+
 
 // Importar rutas
 const searchRoutes = require('./src/Routes/search');
