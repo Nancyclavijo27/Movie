@@ -27,7 +27,7 @@ const axios = require('axios');
  *               rating: 8.5
  */
 
-router.get('/:id', async (req, res) => {
+router.get('/details/:id', async (req, res) => {
   try {
     const { id } = req.params;
     const response = await axios.get(`${process.env.TMDB_API_URL}/movie/${id}`, {
