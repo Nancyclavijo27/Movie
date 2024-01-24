@@ -11,6 +11,16 @@ const PORT = process.env.PORT || 3001;
 app.use(express.json());
 app.use(cors());
 
+const corsOptions = {
+  origin: '*', // Permitir solicitudes desde cualquier origen
+  methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
+  credentials: true,
+  optionsSuccessStatus: 204,
+};
+
+app.use(cors(corsOptions));
+
+
 // Importar rutas
 const searchRoutes = require('./src/Routes/search');
 const detailsRoutes = require('./src/Routes/details');
