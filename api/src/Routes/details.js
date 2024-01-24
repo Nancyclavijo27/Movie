@@ -25,16 +25,28 @@ const axios = require('axios');
  *               description: 'Descripción de la película.'
  *               genre: 'Acción, Aventura'
  *               rating: 8.5
+ *       '400':
+ *         description: ID de película no válido.
+ *         content:
+ *           application/json:
+ *             example:
+ *               error: 'ID de película no válido'
+ *       '500':
+ *         description: Error interno del servidor.
+ *         content:
+ *           application/json:
+ *             example:
+ *               error: 'Internal Server Error'
  */
 
 router.get('/:id', async (req, res) => {
   try {
     const { id } = req.params;
-    // Validar que el ID sea un número válido antes de hacer la solicitud
+
     if (isNaN(id) || id <= 0) {
-      res.status(400).json({ error: 'ID de película no válido' });
-      return;
+      return res.status(400).json({ error: 'ID de película no válido' });
     }
+
     const response = await axios.get(`${process.env.TMDB_API_URL}/movie/${id}`, {
       params: {
         api_key: process.env.TMDB_API_KEY,
@@ -48,22 +60,16 @@ router.get('/:id', async (req, res) => {
       rating: response.data.vote_average,
     };
 
-    res.json(movieDetails);
+    return res.json(movieDetails);
   } catch (error) {
     console.error(error);
-  
+
     if (error.response) {
-      // La solicitud se completó, pero el servidor respondió con un código de estado diferente de 2xx
-      console.error('Error de respuesta del servidor:', error.response.data);
-      res.status(error.response.status).json({ error: error.response.data });
+      return res.status(error.response.status).json({ error: error.response.data });
     } else if (error.request) {
-      // La solicitud fue hecha, pero no se recibió respuesta
-      console.error('No se recibió respuesta del servidor:', error.request);
-      res.status(500).json({ error: 'Internal Server Error' });
+      return res.status(500).json({ error: 'No se recibió respuesta del servidor' });
     } else {
-      // Ocurrió un error durante la configuración de la solicitud
-      console.error('Error durante la configuración de la solicitud:', error.message);
-      res.status(500).json({ error: 'Internal Server Error' });
+      return res.status(500).json({ error: 'Error durante la configuración de la solicitud' });
     }
   }
 });

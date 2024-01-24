@@ -4,6 +4,7 @@ import { getMovieDetails } from '../services/api';
 const MovieDetail = ({ movieId }) => {
   const [selectedMovie, setSelectedMovie] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
 
   useEffect(() => {
     console.log('MovieDetail component is mounted with movieId:', movieId);
@@ -19,10 +20,11 @@ const MovieDetail = ({ movieId }) => {
         if (details && details.title) {
           setSelectedMovie(details);
         } else {
-          console.error('Movie details not available:', details);
+          setError('Movie details not available');
         }
       } catch (error) {
         console.error('Error fetching movie details:', error);
+        setError('Error fetching movie details');
       } finally {
         setLoading(false);
       }
@@ -33,6 +35,10 @@ const MovieDetail = ({ movieId }) => {
 
   if (loading) {
     return <p>Cargando...</p>;
+  }
+
+  if (error) {
+    return <p>Error: {error}</p>;
   }
 
   return (

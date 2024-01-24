@@ -11,14 +11,6 @@ const PORT = process.env.PORT || 3001;
 app.use(express.json());
 app.use(cors());
 
-const corsOptions = {
-  origin: '*',
-  optionsSuccessStatus: 200,
-};
-
-app.use(cors(corsOptions));
-
-
 // Importar rutas
 const searchRoutes = require('./src/Routes/search');
 const detailsRoutes = require('./src/Routes/details');
@@ -29,8 +21,6 @@ app.use('/details', detailsRoutes);
 
 // Configurar Swagger
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
-
-
 
 // Ruta para obtener todas las películas populares
 app.get('/movies/popular', async (req, res) => {
@@ -52,7 +42,7 @@ app.get('/movies/popular', async (req, res) => {
     res.json(movies);
   } catch (error) {
     console.error('Error en la solicitud Axios:', error);
-    res.status(500).json({ error: 'Internal Server Error' });
+    res.status(500).json({ error: 'Error al obtener películas populares' });
   }
 });
 
