@@ -8,3 +8,5 @@ Puedes acceder a la documentación de la API utilizando Swagger. Sigue estos pas
 En la documentación de Swagger, podrás explorar y probar los endpoints de la API, así como obtener información detallada sobre cada uno.
 
 Nota: Asegúrate de tener [Swagger UI](https://swagger.io/tools/swagger-ui/) instalado y habilitado en tu aplicación para que funcione correctamente.
+
+Eso es todo!
