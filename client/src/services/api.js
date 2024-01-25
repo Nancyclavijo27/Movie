@@ -1,7 +1,7 @@
 import axios from 'axios';
 
 // Utiliza el dominio donde se despliega tu backend en lugar de localhost
-const baseURL = import.meta.env.VITE_REACT_APP_BACKEND_URL || 'https://movapi-0u9d.onrender.com';
+const baseURL = process.env.NODE_ENV === 'development' ? 'http://localhost:3001' : 'https://movapi-0u9d.onrender.com';
 
 const tmdbAxios = axios.create({
   baseURL: baseURL,
